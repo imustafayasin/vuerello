@@ -8,6 +8,8 @@
 }
 .head {
   padding: 0 4px;
+  display: flex;
+  align-items: center;
 }
 .content {
   margin-top: 15px;
@@ -57,6 +59,14 @@ textarea {
 .footer:focus-within .add-cart span {
   display: none;
 }
+.removeListButton {
+  width: 28px;
+  height: 28px;
+  line-height: 0;
+}
+.removeListButton:hover{
+    background: #ddd;
+}
 </style>
 
 <template>
@@ -69,6 +79,9 @@ textarea {
         id=""
         v-model="list_item_title"
       />
+      <button class="removeListButton" @click="removeList(list_item)">
+        &times;
+      </button>
     </div>
     <div class="content">
       <template v-for="card in list_item.cards" :key="card.cardName">
@@ -111,6 +124,11 @@ export default {
     },
     updateLocalStorage() {
       localStorage.lists = JSON.stringify(this.list_items);
+    },
+    removeList(list__item) {
+      let remove_item = this.listItems.indexOf(list__item);
+      this.list_items.splice(remove_item, 1);
+      this.updateLocalStorage();
     },
   },
   data() {
