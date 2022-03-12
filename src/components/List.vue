@@ -2,12 +2,15 @@
 .list {
   background-color: #ebecf0;
   width: 272px;
-  padding: 10px 12px;
+  flex-shrink: 0;
+  padding: 10px 8px;
   border-radius: var(--default-radius);
 }
-
+.head {
+  padding: 0 4px;
+}
 .content {
-  margin: 15px 0;
+  margin-top: 15px;
 }
 input {
   width: 100%;
@@ -49,7 +52,7 @@ textarea {
 
 .footer:focus-within .add-cart-content {
   display: block;
-  margin-top: -37px;
+  margin-top: -27px;
 }
 .footer:focus-within .add-cart span {
   display: none;
@@ -62,7 +65,7 @@ textarea {
       <input type="text" name="" id="" :value="listItem.name" />
     </div>
     <div class="content">
-      <template v-for="card in listItem.cards" :key="card.cardName">
+      <template v-for="card in list_item.cards" :key="card.cardName">
         <Card :card="card" />
       </template>
     </div>
@@ -84,6 +87,7 @@ export default {
   name: "List",
   props: {
     listItem: Object,
+    listItems: Object,
   },
   components: {
     Card,
@@ -91,14 +95,16 @@ export default {
   methods: {
     addCart() {
       if (!this.cardName) return;
-      this.listItems.cards.push({ cardName: this.cardName });
+      this.list_item.cards.push({ cardName: this.cardName });
       this.cardName = null;
+      localStorage.lists = JSON.stringify(this.list_items);
     },
   },
   data() {
     return {
       cardName: null,
-      listItems: this.listItem,
+      list_item: this.listItem,
+      list_items: this.listItems,
     };
   },
 };

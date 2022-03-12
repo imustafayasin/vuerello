@@ -6,6 +6,7 @@
   cursor: pointer;
   color: #fff;
   width: 272px;
+  flex-shrink: 0;
 }
 .add-list .actions {
   --opacity: 0;
@@ -36,7 +37,7 @@
 .add-list input {
   background-color: transparent;
 }
-.add-list:not(:focus-within) input::placeholder {
+.add-list:not(:focus-within) :is(input::placeholder,input) {
   color: #fff;
 }
 .add-list:hover {
@@ -50,8 +51,8 @@
 </style>
 <template>
   <div class="lists">
-    <template v-for="list in lists" :key="list.name">
-      <List :listItem="list" />
+    <template v-for="list in lists" :key="list.cards">
+      <List :listItem="list" :listItems="lists" />
     </template>
     <div class="add-list">
       <input
@@ -98,31 +99,33 @@ export default {
       if (!this.listName) return;
       this.lists.push({
         name: this.listName,
-        cards:[]
+        cards: [],
       });
       this.listName = null;
+      localStorage.lists = JSON.stringify(this.lists);
     },
   },
   data() {
     return {
       listName: "",
-      lists: [
-        {
-          name: "To do list",
-          cards: [
+      lists: localStorage?.lists
+        ? JSON.parse(localStorage?.lists)
+        : [
             {
-              cardName: "Read A Book",
-            },
-            {
-              cardName: "Hard Working",
+              name: "To do list",
+              cards: [
+                {
+                  cardName: "Read A Book",
+                },
+                {
+                  cardName: "Hard Working",
+                },
+              ],
             },
           ],
-        },
-      ],
     };
   },
   mounted() {
-    console.log("asd");
     this.setBgImage();
     this.addList();
     document.addEventListener("keyup", (e) => {
