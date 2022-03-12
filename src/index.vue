@@ -37,7 +37,10 @@
 .add-list input {
   background-color: transparent;
 }
-.add-list:not(:focus-within) :is(input::placeholder,input) {
+.add-list:not(:focus-within) :is(input::placeholder, input) {
+  color: #fff;
+}
+.add-list:not(:focus-within) input::placeholder {
   color: #fff;
 }
 .add-list:hover {
@@ -59,10 +62,10 @@
         v-model="listName"
         type="text"
         tabindex="0"
-        placeholder="+ Başka bir liste ekleyin"
+        placeholder="+ Add another list"
       />
       <div class="actions" tabindex="0">
-        <button @click="addList()" class="add">Listeye Ekle</button>
+        <button @click="addList()" class="add">Add List</button>
       </div>
     </div>
   </div>
@@ -70,6 +73,7 @@
 
 <script>
 import List from "./components/List";
+import keyHanding from "./assets/js/utils.js";
 export default {
   name: "App",
   components: {
@@ -112,13 +116,13 @@ export default {
         ? JSON.parse(localStorage?.lists)
         : [
             {
-              name: "To do list",
+              name: "Welcome !",
               cards: [
                 {
-                  cardName: "Read A Book",
+                  cardName: "Smile :)",
                 },
                 {
-                  cardName: "Hard Working",
+                  cardName: "Be Happy",
                 },
               ],
             },
@@ -127,11 +131,8 @@ export default {
   },
   mounted() {
     this.setBgImage();
-    this.addList();
     document.addEventListener("keyup", (e) => {
-      if (e.key == "Enter") {
-        this.addList();
-      }
+      keyHanding(e.key, this.addList);
     });
   },
 };

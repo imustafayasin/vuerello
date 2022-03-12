@@ -62,7 +62,13 @@ textarea {
 <template>
   <div class="list">
     <div class="head">
-      <input type="text" name="" id="" :value="listItem.name" />
+      <input
+        type="text"
+        @change="updateTitle(listItem)"
+        name=""
+        id=""
+        v-model="list_item_title"
+      />
     </div>
     <div class="content">
       <template v-for="card in list_item.cards" :key="card.cardName">
@@ -70,13 +76,13 @@ textarea {
       </template>
     </div>
     <div class="footer">
-      <button class="add-cart" tabindex="-1"><span>+ Add Cart</span></button>
+      <button class="add-cart" tabindex="-1"><span>+ Add Card</span></button>
       <div class="add-cart-content active">
         <textarea
-          placeholder="Bu kart için bir başlık girin"
+          placeholder="Add title for this card"
           v-model="cardName"
         ></textarea>
-        <button class="add" @click="addCart()">Kart Ekle</button>
+        <button class="add" @click="addCart()">Add Card</button>
       </div>
     </div>
   </div>
@@ -97,12 +103,20 @@ export default {
       if (!this.cardName) return;
       this.list_item.cards.push({ cardName: this.cardName });
       this.cardName = null;
+      this.updateLocalStorage();
+    },
+    updateTitle(item) {
+      item.name = this.list_item_title;
+      this.updateLocalStorage();
+    },
+    updateLocalStorage() {
       localStorage.lists = JSON.stringify(this.list_items);
     },
   },
   data() {
     return {
       cardName: null,
+      list_item_title: this.listItem.name,
       list_item: this.listItem,
       list_items: this.listItems,
     };
