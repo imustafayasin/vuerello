@@ -36,7 +36,9 @@ input:not(:focus) {
 }
 .footer > button.add-cart span {
   padding: 6px 8px;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .footer:hover > button.add-cart {
   backdrop-filter: brightness(0.9);
@@ -64,8 +66,8 @@ textarea {
   height: 28px;
   line-height: 0;
 }
-.removeListButton:hover{
-    background: #ddd;
+.removeListButton:hover {
+  background: #ddd;
 }
 </style>
 
@@ -80,7 +82,7 @@ textarea {
         v-model="list_item_title"
       />
       <button class="removeListButton" @click="removeList(list_item)">
-        &times;
+        <Icon :size="16" icon="close" />
       </button>
     </div>
     <div class="content">
@@ -89,11 +91,14 @@ textarea {
       </template>
     </div>
     <div class="footer">
-      <button class="add-cart" tabindex="-1"><span>+ Add Card</span></button>
+      <button class="add-cart" tabindex="-1">
+        <span><Icon :size="20" icon="add" /> Add Card</span>
+      </button>
       <div class="add-cart-content active">
         <textarea
           placeholder="Add title for this card"
           v-model="cardName"
+          @keyup.enter="addCart()"
         ></textarea>
         <button class="add" @click="addCart()">Add Card</button>
       </div>
@@ -102,6 +107,7 @@ textarea {
 </template>
 <script>
 import Card from "./Card";
+import Icon from "./Icon";
 export default {
   name: "List",
   props: {
@@ -110,10 +116,11 @@ export default {
   },
   components: {
     Card,
+    Icon,
   },
   methods: {
     addCart() {
-      if (!this.cardName) return;
+      if (this.cardName.trim() == "") return;
       this.list_item.cards.push({ cardName: this.cardName });
       this.cardName = null;
       this.updateLocalStorage();
