@@ -1,5 +1,5 @@
 <style scoped>
-.card {
+body input.card {
   background-color: #fff;
   padding: 6px 8px;
   border-radius: var(--default-radius);
@@ -9,6 +9,8 @@
   color: #172b4d;
   cursor: pointer;
   position: relative;
+  width: 100%;
+  transition: 250ms all ease-in-out;
 }
 .card .edit {
   position: absolute;
@@ -20,28 +22,39 @@
   line-height: 25px;
   visibility: hidden;
 }
-.card:hover {
+input.card:hover {
   filter: brightness(0.95);
+}
+input.card:focus{
+  border:1px solid lightskyblue
+}
+input.card:active{
+  background-color: #fff;
+  border:0;
+  caret-color: transparent;
 }
 .card:hover .edit {
   visibility: visible;
 }
 </style>
 <template>
-  <div class="card">
-    {{ card.cardName }}
-    <div class="edit"><Icon :size="10" icon="pen" /></div>
-  </div>
+  <input  draggable="true"  @dragstart="dragStart" class="card" :value="card.cardName " />
 </template>
 <script>
-import Icon from "../components/Icon";
+// import Icon from "../components/Icon";
 export default {
   name: "Card",
   props: {
     card: Object,
   },
   components: {
-    Icon,
+    // Icon,
   },
+  methods:{
+    dragStart(event){
+
+      console.log(event.target)
+    }
+  }
 };
 </script>

@@ -55,7 +55,7 @@
 <template>
   <div class="lists">
     <template v-for="list in lists" :key="list.cards">
-      <List :listItem="list" :listItems="lists" />
+      <List v-on:addCart="addCart" :listItem="list" :listItems="lists" />
     </template>
     <div class="add-list">
       <input
@@ -99,6 +99,10 @@ export default {
         console.log("image process");
       }
     },
+    addCart(listCards, payload) {
+      console.log("fired");
+      listCards.push(payload);
+    },
     addList: function () {
       if (!this.listName) return;
       this.lists.push({
@@ -117,6 +121,7 @@ export default {
         : [
             {
               name: "Welcome !",
+              order: 1,
               cards: [
                 {
                   cardName: "Smile :)",
@@ -131,6 +136,7 @@ export default {
   },
   mounted() {
     this.setBgImage();
+    console.log(JSON.parse(localStorage?.lists).sort());
     document.addEventListener("keyup", (e) => {
       keyHanding(e.key, this.addList);
     });
