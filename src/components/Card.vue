@@ -25,20 +25,50 @@ body input.card {
 input.card:hover {
   filter: brightness(0.95);
 }
-input.card:focus{
-  border:1px solid lightskyblue
+input.card:focus {
+  border: 1px solid lightskyblue;
 }
-input.card:active{
+/* input.card:focus + .remove{
+  visibility: visible;
+} */
+input.card:active {
   background-color: #fff;
-  border:0;
+  border: 0;
   caret-color: transparent;
 }
 .card:hover .edit {
   visibility: visible;
 }
+.relative {
+  position: relative;
+}
+.relative .remove {
+  inset: 5px 10px auto auto;
+  position: absolute;
+  font-size: 18px;
+  background: #a8a8a800;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  border-radius: 2px;
+  place-items: center;
+  line-height: 20px;
+  cursor: pointer;
+}
+.relative .remove:hover {
+  background-color: #dbdbdb;
+}
 </style>
 <template>
-  <input  draggable="true"  @dragstart="dragStart" class="card" :value="card.cardName " />
+  <div class="relative">
+    <input
+      draggable="true"
+
+      class="card"
+      :value="card.cardName"
+    />
+    <div @click="removeCard(card)" class="remove">&times;</div>
+  </div>
 </template>
 <script>
 // import Icon from "../components/Icon";
@@ -50,11 +80,11 @@ export default {
   components: {
     // Icon,
   },
-  methods:{
-    dragStart(event){
+  methods: {
 
-      console.log(event.target)
-    }
-  }
+    removeCard() {
+      this.$emit("removeCard", this.card.cardName);
+    },
+  },
 };
 </script>

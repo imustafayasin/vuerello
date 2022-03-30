@@ -100,8 +100,7 @@ export default {
       }
     },
     addCart(listCards, payload) {
-      console.log("fired");
-      listCards.push(payload);
+      payload.cardName.trim() ? listCards.push(payload) : "";
     },
     addList: function () {
       if (!this.listName) return;
@@ -136,7 +135,6 @@ export default {
   },
   mounted() {
     this.setBgImage();
-    console.log(JSON.parse(localStorage?.lists).sort());
     document.addEventListener("keyup", (e) => {
       keyHanding(e.key, this.addList);
     });

@@ -6,7 +6,7 @@
   padding: 10px 8px;
   border-radius: var(--default-radius);
 }
-.list.dragover{
+.list.dragover {
   transform: scale(1.06);
 }
 .head {
@@ -73,13 +73,17 @@ textarea {
 .removeListButton:hover {
   background: #ddd;
 }
-.card.dragover{
-  padding-top: 32px;;
+.card.dragover {
+  padding-top: 32px;
 }
 </style>
 
 <template>
-  <div :class="isDragOver ? 'dragover list' : 'list'" @dragleave="dragLeave" @dragover="dragOver">
+  <div
+    :class="isDragOver ? 'dragover list' : 'list'"
+    @dragleave="dragLeave"
+    @dragover="dragOver"
+  >
     <div class="head">
       <input
         type="text"
@@ -94,7 +98,11 @@ textarea {
     </div>
     <div class="content">
       <template v-for="card in list_item.cards" :key="card.cardName">
-        <Card  :card="card" :dragover="isDragOver ? 'dragover': ''" />
+        <Card
+          v-on:removeCard="removeCard"
+          :card="card"
+          :dragover="isDragOver ? 'dragover' : ''"
+        />
       </template>
     </div>
     <div class="footer">
@@ -107,7 +115,7 @@ textarea {
           v-model="cardName"
           @keyup.enter="addCart()"
         ></textarea>
-        <button class="add" @click="addCart()">Add Card</button>
+        <button class="add" @click="addCart($event)">Add Card</button>
       </div>
     </div>
   </div>
@@ -126,8 +134,8 @@ export default {
     Icon,
   },
   methods: {
-    addCart() {
-      console.log(this.cardName, "asasd", typeof this.cardName);
+    addCart(/*e*/) {
+      // e.preventDefault();
       if (this.cardName == null) return;
       this.$emit("addCart", this.list_item.cards, { cardName: this.cardName });
       this.cardName = null;
@@ -140,18 +148,26 @@ export default {
     updateLocalStorage() {
       localStorage.lists = JSON.stringify(this.list_items);
     },
+    removeCard(cardName) {
+      let cardIndex = this.list_item.cards.indexOf(
+        this.list_item.cards.find((t) => t.cardName == cardName)
+      );
+      this.list_item.cards.splice(cardIndex, 1);
+    },
     removeList(list__item) {
       let remove_item = this.listItems.indexOf(list__item);
       this.list_items.splice(remove_item, 1);
       this.updateLocalStorage();
     },
     dragOver(event) {
-      console.log("dragg overrr");
-      event.target.classList.contains("card") || event.target.classList.contains("list")  ? event.target.classList.add("dragover") : "";
+      event.target.classList.contains("card") ||
+      event.target.classList.contains("list")
+        ? event.target.classList.add("dragover")
+        : "";
     },
-    dragLeave(event){
-      event.target.classList.remove("dragover")
-    }
+    dragLeave(event) {
+      event.target.classList.remove("dragover");
+    },
   },
   data() {
     return {
